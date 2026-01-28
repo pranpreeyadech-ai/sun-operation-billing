@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sun Operation Billing Infographic</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+
+    <!-- Font: Noto Sans Thai -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <!-- Custom Palette & Container Styles -->
+    <style>
+        /* Palette: 'Energetic Professional'
+           Primary Blue: #1E3A8A (Tailwind blue-900)
+           Accent Orange: #F97316 (Tailwind orange-500)
+           Background: #F3F4F6 (Tailwind gray-100)
+        */
+        body {
+            font-family: 'Noto Sans Thai', sans-serif;
+            background-color: #F3F4F6;
+            color: #1F2937;
+        }
+
+        /* Chart Container Logic per Requirements */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px; /* Constraint for large screens */
+            margin-left: auto;
+            margin-right: auto;
+            height: 40vh; /* Responsive base height */
+            max-height: 400px; /* Cap height */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Card Hover Effects */
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Custom Flow Arrow styling without SVG */
+        .flow-arrow::after {
+            content: '➔';
+            font-size: 2rem;
+            color: #F97316;
+            display: block;
+            text-align: center;
+            margin: 1rem 0;
+        }
+        @media (min-width: 768px) {
+            .flow-arrow::after {
+                transform: rotate(-90deg); /* Adjust if needed, but horizontal flow usually right */
+                display: none; /* Hide default block arrow on desktop grid if doing side-by-side */
+            }
+            .flow-arrow-md::after {
+                content: '➔';
+                font-size: 2rem;
+                color: #F97316;
+                position: absolute;
+                top: 50%;
+                right: -20px;
+                transform: translateY(-50%);
+            }
+        }
+    </style>
+    <!-- 
+    NO SVG USED. 
+    NO MERMAID JS USED.
+    Palette: Brilliant Blues & Oranges.
+    -->
+    <!-- 
+    Source Material Analysis:
+    1. Core Theme: Efficient and correct billing submission to ensure payment.
+    2. Narrative: Start with the "Who" (Header), move to "What" (Docs), then "Exceptions" (Special cases), then "How" (Process), conclude with "Where" (Contact).
+    3. Visual Choices:
+       - Polar Chart: Chosen for "Core Docs" to show them as equal parts of a whole cycle.
+       - Bar Chart: Chosen for "Special Cases" to compare distinct requirements.
+       - Plotly Gauge: Chosen to represent the goal of "Completeness".
+       - HTML Flow: Chosen for the submission steps as it is sequential.
+    -->
+</head>
+<body class="bg-gray-100 pb-20">
+
+    <!-- Header Section -->
+    <header class="bg-blue-900 text-white shadow-lg">
+        <div class="container mx-auto px-6 py-12 text-center">
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight">
+                คู่มือการวางบิลและภาษี
+            </h1>
+            <h2 class="text-xl md:text-2xl font-light text-blue-200">
+                บริษัท ซัน โอเปอเรชั่น จำกัด
+            </h2>
+            <div class="mt-8">
+                <span class="inline-block bg-orange-500 text-white px-6 py-2 rounded-full font-semibold shadow-md uppercase tracking-wider text-sm">
+                    สำหรับคู่ค้าและฝ่ายขาย
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main class="container mx-auto px-4 mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+
+        <!-- Section 1: Introduction -->
+        <section class="col-span-1 md:col-span-2 bg-white rounded-xl shadow-md p-8 border-l-8 border-orange-500">
+            <h3 class="text-2xl font-bold text-blue-900 mb-4">ยินดีต้อนรับพาร์ทเนอร์ทางธุรกิจ</h3>
+            <p class="text-gray-600 leading-relaxed text-lg">
+                เพื่อให้กระบวนการวางบิลและการจ่ายเงินเป็นไปอย่างราบรื่นและรวดเร็ว ทางบริษัท ซัน โอเปอเรชั่น จำกัด 
+                ได้สรุปขั้นตอนและเอกสารที่จำเป็นไว้ในหน้านี้ กรุณาตรวจสอบความถูกต้องของเอกสารก่อนนำส่ง 
+                เพื่อลดข้อผิดพลาดและช่วยให้ท่านได้รับชำระเงินตามกำหนด
+            </p>
+        </section>
+
+        <!-- Section 2: Core Documents (Polar Area Chart) -->
+        <div class="col-span-1 bg-white rounded-xl shadow-md p-6 hover-lift">
+            <div class="mb-4">
+                <h3 class="text-xl font-bold text-blue-900 flex items-center">
+                    <span class="bg-blue-100 text-blue-800 py-1 px-3 rounded-full text-sm mr-3">Required</span>
+                    5 เอกสารหลักในการวางบิล
+                </h3>
+                <p class="text-sm text-gray-500 mt-2">
+                    ชุดเอกสารมาตรฐานที่ต้องมีทุกครั้ง (ต้นฉบับ) กราฟด้านล่างแสดงองค์ประกอบสำคัญทั้ง 5 ส่วนที่ขาดไม่ได้
+                </p>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="coreDocsChart"></canvas>
+            </div>
+            
+            <div class="mt-4 text-center">
+                <p class="text-xs text-gray-400 font-mono">ลายเซ็นต้องครบถ้วนสมบูรณ์</p>
+            </div>
+        </div>
+
+        <!-- Section 3: Special Cases (Bar Chart) -->
+        <div class="col-span-1 bg-white rounded-xl shadow-md p-6 hover-lift">
+            <div class="mb-4">
+                <h3 class="text-xl font-bold text-blue-900 flex items-center">
+                    <span class="bg-orange-100 text-orange-800 py-1 px-3 rounded-full text-sm mr-3">Condition</span>
+                    เอกสารเพิ่มเติมตามกรณี
+                </h3>
+                <p class="text-sm text-gray-500 mt-2">
+                    ธุรกรรมบางประเภทต้องการหลักฐานเฉพาะเจาะจง กราฟแสดงข้อกำหนดพิเศษสำหรับ วัตถุดิบ, บริการ และคู่ค้ารายใหม่
+                </p>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="specialCasesChart"></canvas>
+            </div>
+            
+             <div class="mt-4 text-center">
+                <p class="text-xs text-gray-400 font-mono">กรุณาตรวจสอบประเภทการขายของท่าน</p>
+            </div>
+        </div>
+
+        <!-- Section 4: Submission Process (HTML Flow) -->
+        <section class="col-span-1 md:col-span-2 bg-gradient-to-r from-blue-900 to-blue-800 rounded-xl shadow-xl p-8 text-white">
+            <div class="mb-8 text-center">
+                <h3 class="text-2xl font-bold text-white">ขั้นตอนการส่งเอกสาร (Submission Process)</h3>
+                <p class="text-blue-200 mt-2">ปฏิบัติตาม 2 ขั้นตอนนี้เพื่อความรวดเร็วในการตรวจสอบ</p>
+            </div>
+
+            <div class="flex flex-col md:flex-row items-center justify-center gap-8">
+                <!-- Step 1 -->
+                <div class="flex-1 bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20 text-center relative w-full md:w-auto">
+                    <div class="text-4xl mb-4">📧</div>
+                    <h4 class="text-xl font-bold text-orange-400 mb-2">Step 1: Digital Scan</h4>
+                    <p class="text-sm text-gray-200">
+                        ส่งไฟล์สแกนเอกสารทั้งหมดทางอีเมลเพื่อตรวจสอบความถูกต้องเบื้องต้น
+                    </p>
+                    <div class="hidden md:block absolute top-1/2 -right-6 transform -translate-y-1/2 text-orange-500 text-3xl font-bold">➔</div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="flex-1 bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20 text-center w-full md:w-auto mt-8 md:mt-0">
+                    <div class="text-4xl mb-4">📮</div>
+                    <h4 class="text-xl font-bold text-orange-400 mb-2">Step 2: Original Post</h4>
+                    <p class="text-sm text-gray-200">
+                        เมื่อผ่านการตรวจสอบ ส่งเอกสาร <strong>ตัวจริง</strong> ตามมาทางไปรษณีย์
+                    </p>
+                </div>
+            </div>
+             <div class="mt-8 text-center border-t border-blue-700 pt-4">
+                <p class="text-sm font-semibold text-orange-300">
+                    ⚠️ อย่าลืม! ยืนยันการรับใบสั่งซื้อ (PO) กลับทางอีเมลทุกครั้ง
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 5: Tax Info & Address (Plotly & Cards) -->
+        <div class="col-span-1 md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <!-- Plotly Gauge: Billing Completeness -->
+            <div class="col-span-1 bg-white rounded-xl shadow-md p-6 flex flex-col items-center justify-center">
+                <h4 class="text-lg font-bold text-gray-700 mb-2">เป้าหมายความถูกต้อง</h4>
+                <div id="completenessGauge" style="width: 100%; height: 250px;"></div>
+                <p class="text-xs text-center text-gray-500 mt-2">เอกสารครบ = รับเงินไว</p>
+            </div>
+
+            <!-- Tax Info Card -->
+            <div class="col-span-1 md:col-span-2 bg-white rounded-xl shadow-md p-6 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-orange-100 rounded-full -mr-16 -mt-16 opacity-50"></div>
+                
+                <h3 class="text-2xl font-bold text-blue-900 mb-6 border-b pb-2">ข้อมูลออกใบกำกับภาษี</h3>
+                
+                <div class="space-y-4">
+                    <div class="flex flex-col md:flex-row md:items-center">
+                        <span class="w-32 font-semibold text-gray-500 text-sm uppercase">ชื่อนิติบุคคล</span>
+                        <span class="text-lg font-bold text-gray-800">บริษัท ซัน โอเปอเรชั่น จำกัด</span>
+                    </div>
+                    
+                    <div class="flex flex-col md:flex-row md:items-center bg-blue-50 p-3 rounded-lg border border-blue-100">
+                        <span class="w-32 font-semibold text-blue-600 text-sm uppercase">เลขผู้เสียภาษี</span>
+                        <span class="text-2xl font-mono font-bold text-blue-900 tracking-wider">0105567195884</span>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row">
+                        <span class="w-32 font-semibold text-gray-500 text-sm uppercase mt-1">ที่อยู่</span>
+                        <span class="text-gray-700">เลขที่ 45 หมู่ที่ 4 ตำบลโคกแย้ อำเภอหนองแค จังหวัดสระบุรี 18230</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 6: Shipping Address -->
+        <div class="col-span-1 md:col-span-2 bg-gray-800 rounded-xl shadow-lg p-8 text-white mb-8">
+             <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="mb-6 md:mb-0">
+                    <h3 class="text-xl font-bold text-orange-400 uppercase tracking-widest mb-2">สถานที่จัดส่งเอกสาร</h3>
+                    <p class="text-2xl font-light">แผนกบัญชี</p>
+                    <p class="text-gray-400 mt-1">บริษัท ซัน โอเปอเรชั่น จำกัด</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-lg">เลขที่ 45 หมู่ที่ 4 ต.โคกแย้ อ.หนองแค</p>
+                    <p class="text-lg">จ.สระบุรี 18230</p>
+                    <div class="mt-4 inline-block bg-orange-600 px-4 py-2 rounded-lg font-bold text-xl">
+                        📞 063-3269642
+                    </div>
+                </div>
+             </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center text-gray-500 text-sm py-6">
+        <p>© 2024 Sun Operation Co., Ltd. Infographic Generated for Internal Use.</p>
+    </footer>
+
+    <!-- JavaScript for Charts -->
+    <script>
+        // --- UTILITY: Label Wrapping Logic (Mandatory) ---
+        function wrapLabel(label, maxLength = 16) {
+            if (label.length <= maxLength) return label;
+            const words = label.split(' ');
+            const lines = [];
+            let currentLine = words[0];
+
+            for (let i = 1; i < words.length; i++) {
+                if ((currentLine + ' ' + words[i]).length <= maxLength) {
+                    currentLine += ' ' + words[i];
+                } else {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+
+        // --- CHART 1: Core Documents (Polar Area) ---
+        const ctxPolar = document.getElementById('coreDocsChart').getContext('2d');
+        const rawLabelsPolar = [
+            'ใบวางบิล (Billing Note)', 
+            'ใบเสร็จรับเงิน (Receipt)', 
+            'ใบส่งของ (Delivery Note)', 
+            'ใบกำกับภาษี (Tax Invoice)', 
+            'สำเนาใบสั่งซื้อ (Copy of PO)'
+        ];
+        const processedLabelsPolar = rawLabelsPolar.map(l => wrapLabel(l, 18));
+
+        new Chart(ctxPolar, {
+            type: 'polarArea',
+            data: {
+                labels: processedLabelsPolar,
+                datasets: [{
+                    label: 'Required Original Document',
+                    data: [1, 1, 1, 1, 1], // Equal weight
+                    backgroundColor: [
+                        'rgba(30, 58, 138, 0.9)', // Blue 900
+                        'rgba(249, 115, 22, 0.9)', // Orange 500
+                        'rgba(59, 130, 246, 0.8)', // Blue 500
+                        'rgba(251, 146, 60, 0.8)', // Orange 400
+                        'rgba(147, 197, 253, 0.8)'  // Blue 300
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#ffffff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        ticks: { display: false },
+                        grid: { color: '#e5e7eb' },
+                        pointLabels: {
+                            display: true,
+                            centerPointLabels: true,
+                            font: { size: 11, family: 'Noto Sans Thai' }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { 
+                            font: { family: 'Noto Sans Thai', size: 10 },
+                            usePointStyle: true
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            title: function(tooltipItems) {
+                                const item = tooltipItems[0];
+                                let label = item.chart.data.labels[item.dataIndex];
+                                if (Array.isArray(label)) {
+                                    return label.join(' ');
+                                } else {
+                                    return label;
+                                }
+                            },
+                            label: function(context) {
+                                return "เอกสารจำเป็น (Mandatory)";
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // --- CHART 2: Special Cases (Horizontal Bar) ---
+        const ctxBar = document.getElementById('specialCasesChart').getContext('2d');
+        const rawLabelsBar = [
+            'ซื้อวัตถุดิบ (แนบบิลตราชั่ง)', 
+            'งานบริการ (แนบซองติดแสตมป์)', 
+            'ซื้อขายครั้งแรก (แนบหน้าสมุดบัญชี)'
+        ];
+        const processedLabelsBar = rawLabelsBar.map(l => wrapLabel(l, 20));
+
+        new Chart(ctxBar, {
+            type: 'bar',
+            data: {
+                labels: processedLabelsBar,
+                datasets: [{
+                    label: 'เอกสารแนบเพิ่มเติม',
+                    data: [1, 1, 1],
+                    backgroundColor: 'rgba(249, 115, 22, 0.8)', // Orange
+                    borderColor: 'rgba(249, 115, 22, 1)',
+                    borderWidth: 1,
+                    barPercentage: 0.6
+                }]
+            },
+            options: {
+                indexAxis: 'y', // Horizontal Bar
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        display: false, // Hide value axis as it's categorical
+                        max: 1.5
+                    },
+                    y: {
+                        grid: { display: false },
+                        ticks: { font: { family: 'Noto Sans Thai', size: 12 } }
+                    }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            title: function(tooltipItems) {
+                                const item = tooltipItems[0];
+                                let label = item.chart.data.labels[item.dataIndex];
+                                if (Array.isArray(label)) {
+                                    return label.join(' ');
+                                } else {
+                                    return label;
+                                }
+                            },
+                            label: function(context) {
+                                return "Required Attachment";
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // --- PLOTLY: Gauge Chart (Canvas/SVG via Plotly, allowed library) ---
+        // Requirement: Configure for Canvas where possible or standard Plotly render.
+        // Plotly.js primarily renders SVG for 2D charts but is permitted.
+        
+        var dataGauge = [
+            {
+                type: "indicator",
+                mode: "gauge+number",
+                value: 100,
+                title: { text: "Accuracy", font: { size: 14, color: "#1E3A8A" } },
+                number: { suffix: "%", font: { color: "#1E3A8A" } },
+                gauge: {
+                    axis: { range: [null, 100], tickwidth: 1, tickcolor: "#1E3A8A" },
+                    bar: { color: "#F97316" },
+                    bgcolor: "white",
+                    borderwidth: 2,
+                    bordercolor: "#gray",
+                    steps: [
+                        { range: [0, 50], color: "#E5E7EB" },
+                        { range: [50, 80], color: "#BFDBFE" },
+                        { range: [80, 100], color: "#93C5FD" }
+                    ]
+                }
+            }
+        ];
+
+        var layoutGauge = {
+            width: 250,
+            height: 250,
+            margin: { t: 25, r: 25, l: 25, b: 25 },
+            font: { family: "Noto Sans Thai" },
+            paper_bgcolor: "rgba(0,0,0,0)"
+        };
+        
+        // Plotly by default uses SVG. WebGL is for 3D/Large datasets. 
+        // Standard gauges are SVG based in Plotly, which is acceptable within the library context 
+        // as long as we don't manually write <svg> tags.
+        Plotly.newPlot('completenessGauge', dataGauge, layoutGauge, {displayModeBar: false});
+
+    </script>
+</body>
+</html>
